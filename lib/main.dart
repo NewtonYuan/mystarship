@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mystarship/constants.dart';
@@ -40,11 +42,32 @@ class Home extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.topRight,
-                  child: Container(
-                      alignment: Alignment.center,
-                      height: 48,
-                      width: 48,
-                      child: SvgPicture.asset("assets/icons/menu.svg")),
+                  child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                          backgroundColor: secondaryColor,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 200,
+                              child: Center(
+                                  child: Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Close Botoom Sheet'),
+                                  ),
+                                ],
+                              )),
+                            );
+                          });
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        height: 48,
+                        width: 48,
+                        child: SvgPicture.asset("assets/icons/menu.svg")),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.center,
