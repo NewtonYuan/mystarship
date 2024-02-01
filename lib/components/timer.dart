@@ -33,3 +33,25 @@ class MainPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
+
+class TrianglePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = lightColor
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.fill;
+
+    double outsideStart = size.width / 2;
+    final Path path = Path()
+      ..moveTo(outsideStart, 0)
+      ..lineTo(outsideStart * 3, size.height / 2)
+      ..lineTo(outsideStart, size.height)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
+}

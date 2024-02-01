@@ -38,13 +38,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _counter = ValueNotifier<int>(0);
   int _timeCounter = 0;
-  int totalTime = 7200;
+  int totalTime = 30;
   int hours = 0;
   late Timer _timer = Timer(Duration.zero, () {});
 
   @override
   void initState() {
-    hours = ((totalTime - _timeCounter).remainder(3600) ~/ 60);
+    hours = ((totalTime - _timeCounter) ~/ 3600);
     super.initState();
   }
 
@@ -58,6 +58,7 @@ class _HomeState extends State<Home> {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       setState(() {
         _timeCounter++;
+        hours = ((totalTime - _timeCounter) ~/ 3600);
       });
     });
   }
@@ -98,7 +99,7 @@ class _HomeState extends State<Home> {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 48),
+                    margin: const EdgeInsets.symmetric(vertical: 32),
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
                       color: darkOutineColor,
@@ -119,6 +120,9 @@ class _HomeState extends State<Home> {
                                 return Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
+                                    CustomPaint(
+                                        painter: TrianglePainter(),
+                                        size: const Size(12, 12)),
                                     CustomPaint(
                                       painter: MainPainter(
                                           timeElapsed: _timeCounter,
@@ -155,26 +159,26 @@ class _HomeState extends State<Home> {
                                                       Text(
                                                         '${(totalTime - _timeCounter) ~/ 3600}',
                                                         style: const TextStyle(
-                                                            fontSize: 48,
+                                                            fontSize: 72,
                                                             color: lightColor),
                                                       ),
                                                       const Text(
                                                         'h',
                                                         style: TextStyle(
-                                                            fontSize: 16,
+                                                            fontSize: 24,
                                                             color: lightColor),
                                                       ),
                                                     ],
                                                   )),
                                               Text(
                                                 ((totalTime - _timeCounter)
-                                                            .remainder(7200) ~/
+                                                            .remainder(3600) ~/
                                                         60)
                                                     .toString()
                                                     .padLeft(2, '0'),
                                                 style: TextStyle(
                                                     fontSize:
-                                                        (hours <= 0 ? 64 : 48),
+                                                        (hours <= 0 ? 64 : 56),
                                                     color: lightColor),
                                               ),
                                               const Text(
