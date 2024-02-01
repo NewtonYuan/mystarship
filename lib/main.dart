@@ -1,8 +1,9 @@
-import 'dart:math' as math;
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mystarship/components/home_menu.dart';
+import 'package:mystarship/components/timer.dart';
 import 'package:mystarship/constants.dart';
 
 void main() {
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: primaryColor,
           textTheme:
-              Theme.of(context).textTheme.apply(displayColor: outlineColor)),
+              Theme.of(context).textTheme.apply(displayColor: lightColor)),
       home: const Home(),
     );
   }
@@ -36,6 +37,35 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _counter = ValueNotifier<int>(0);
+  int _timeCounter = 0;
+  int totalTime = 7200;
+  int hours = 0;
+  late Timer _timer = Timer(Duration.zero, () {});
+
+  @override
+  void initState() {
+    hours = ((totalTime - _timeCounter).remainder(3600) ~/ 60);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      setState(() {
+        _timeCounter++;
+      });
+    });
+  }
+
+  void stopTimer() {
+    _timer.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -55,18 +85,7 @@ class _HomeState extends State<Home> {
                           backgroundColor: secondaryColor,
                           context: context,
                           builder: (BuildContext context) {
-                            return SizedBox(
-                              height: 200,
-                              child: Center(
-                                  child: Column(
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Close Botoom Sheet'),
-                                  ),
-                                ],
-                              )),
-                            );
+                            return const HomeMenu();
                           });
                     },
                     child: Container(
@@ -98,12 +117,12 @@ class _HomeState extends State<Home> {
                               builder: (BuildContext context, dynamic value,
                                   Widget? child) {
                                 return Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     CustomPaint(
-                                      painter: OpenPainter(
-                                          timeElapsed: _counter.value,
-                                          totalTime: 10,
+                                      painter: MainPainter(
+                                          timeElapsed: _timeCounter,
+                                          totalTime: totalTime,
                                           aniValue: value,
                                           notifier: _counter),
                                     ),
@@ -115,28 +134,86 @@ class _HomeState extends State<Home> {
                                             color: primaryColor,
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                                width: 2, color: outlineColor)),
-                                        child: Text(
-                                          "43:33",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .displayLarge,
-                                        ))
+                                                width: 2, color: lightColor)),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.baseline,
+                                            textBaseline:
+                                                TextBaseline.alphabetic,
+                                            children: [
+                                              Visibility(
+                                                  visible: hours > 0,
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .baseline,
+                                                    textBaseline:
+                                                        TextBaseline.alphabetic,
+                                                    children: [
+                                                      Text(
+                                                        '${(totalTime - _timeCounter) ~/ 3600}',
+                                                        style: const TextStyle(
+                                                            fontSize: 48,
+                                                            color: lightColor),
+                                                      ),
+                                                      const Text(
+                                                        'h',
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: lightColor),
+                                                      ),
+                                                    ],
+                                                  )),
+                                              Text(
+                                                ((totalTime - _timeCounter)
+                                                            .remainder(7200) ~/
+                                                        60)
+                                                    .toString()
+                                                    .padLeft(2, '0'),
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        (hours <= 0 ? 64 : 48),
+                                                    color: lightColor),
+                                              ),
+                                              const Text(
+                                                'm',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: lightColor),
+                                              ),
+                                              Text(
+                                                (totalTime - _timeCounter)
+                                                    .remainder(60)
+                                                    .toString()
+                                                    .padLeft(2, '0'),
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        (hours <= 0 ? 32 : 24),
+                                                    color: lightColor),
+                                              ),
+                                              const Text(
+                                                's',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: lightColor),
+                                              ),
+                                            ]))
                                   ],
                                 );
                               },
                             );
                           },
                         ),
-                        const SizedBox(
-                            height:
-                                48), // Adjust the space between the two containers
+                        const SizedBox(height: 48),
                         GestureDetector(
                           onTapUp: (TapUpDetails details) {
-                            if (_counter.value < 10) {
-                              _counter.value++;
+                            if (_timer.isActive) {
+                              stopTimer();
+                              _timeCounter = 0;
                             } else {
-                              _counter.value = 0;
+                              startTimer();
                             }
                           },
                           child: Container(
@@ -146,12 +223,11 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                                 color: primaryColor,
                                 shape: BoxShape.rectangle,
-                                border:
-                                    Border.all(width: 2, color: outlineColor),
+                                border: Border.all(width: 2, color: lightColor),
                                 borderRadius: BorderRadius.circular(16)),
                             child: const Text("Start",
-                                style: TextStyle(
-                                    fontSize: 24, color: outlineColor)),
+                                style:
+                                    TextStyle(fontSize: 24, color: lightColor)),
                           ),
                         )
                       ],
@@ -175,35 +251,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-}
-
-class OpenPainter extends CustomPainter {
-  int timeElapsed;
-  int totalTime;
-  final aniValue;
-  double pi = math.pi;
-  final ValueNotifier<int> notifier;
-
-  OpenPainter(
-      {required this.timeElapsed,
-      required this.totalTime,
-      this.aniValue,
-      required this.notifier})
-      : super(repaint: notifier);
-  @override
-  void paint(Canvas canvas, Size size) {
-    Rect rect = const Offset(-120.0, 0) & const Size(240.0, 240.0);
-
-    var paint = Paint()
-      ..color = outlineColor
-      ..strokeWidth = 24
-      ..style = PaintingStyle.stroke;
-
-    double start = pi * 1.5;
-    double end = (360 * (timeElapsed / totalTime)) * math.pi / 180 * aniValue;
-    canvas.drawArc(rect, start, end, false, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
