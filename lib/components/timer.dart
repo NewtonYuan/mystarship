@@ -10,23 +10,27 @@ class MainPainter extends CustomPainter {
   double pi = math.pi;
   final ValueNotifier<int> notifier;
 
-  MainPainter(
-      {required this.timeElapsed,
-      required this.totalTime,
-      required this.aniValue,
-      required this.notifier})
-      : super(repaint: notifier);
+  MainPainter({
+    required this.timeElapsed,
+    required this.totalTime,
+    required this.aniValue,
+    required this.notifier,
+  }) : super(repaint: notifier);
+
   @override
   void paint(Canvas canvas, Size size) {
-    Rect rect = const Offset(-120.0, 0) & const Size(240.0, 240.0);
+    Rect rect = const Offset(-125.0, 0) & const Size(250.0, 250.0);
 
     var paint = Paint()
       ..color = lightColor
-      ..strokeWidth = 24
-      ..style = PaintingStyle.stroke;
+      ..strokeWidth = 12
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
 
     double start = pi * 1.5;
-    double end = (360 * (timeElapsed / totalTime)) * math.pi / 180 * aniValue;
+    double end = (360 * (timeElapsed / totalTime)) * pi / 180 * aniValue;
+
+    // Draw the main arc
     canvas.drawArc(rect, start, end, false, paint);
   }
 
@@ -34,22 +38,35 @@ class MainPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
 
-class TrianglePainter extends CustomPainter {
+class CirclePainter extends CustomPainter {
+  int timeElapsed;
+  int totalTime;
+  double aniValue;
+  double pi = math.pi;
+  final ValueNotifier<int> notifier;
+
+  CirclePainter({
+    required this.timeElapsed,
+    required this.totalTime,
+    required this.aniValue,
+    required this.notifier,
+  }) : super(repaint: notifier);
+
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
+    Rect rect = const Offset(-125.0, 0) & const Size(250.0, 250.0);
+
+    var paint = Paint()
       ..color = lightColor
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.fill;
+      ..strokeWidth = 12
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
 
-    double outsideStart = size.width / 2;
-    final Path path = Path()
-      ..moveTo(outsideStart, 0)
-      ..lineTo(outsideStart * 3, size.height / 2)
-      ..lineTo(outsideStart, size.height)
-      ..close();
+    double start = pi * 1.5;
+    double end = (360 * (timeElapsed / totalTime)) * pi / 180 * aniValue;
 
-    canvas.drawPath(path, paint);
+    // Draw the main arc
+    canvas.drawArc(rect, start, end, false, paint);
   }
 
   @override

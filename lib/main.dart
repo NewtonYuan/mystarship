@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mystarship/components/home_menu.dart';
 import 'package:mystarship/components/timer.dart';
 import 'package:mystarship/constants.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,9 +39,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _counter = ValueNotifier<int>(0);
   int _timeCounter = 0;
-  int totalTime = 30;
+  int totalTime = 90;
   int hours = 0;
   late Timer _timer = Timer(Duration.zero, () {});
+  bool isPressed = false;
 
   @override
   void initState() {
@@ -78,6 +80,48 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
               children: [
+                GestureDetector(
+                  onTapDown: (_) {
+                    setState(() {
+                      isPressed = true;
+                    });
+                  },
+                  onTapUp: (_) {
+                    setState(() {
+                      isPressed = false;
+                    });
+                  },
+                  onTapCancel: () {
+                    setState(() {
+                      isPressed = false;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    alignment: Alignment.center,
+                    height: 50,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: isPressed
+                          ? lightColor
+                          : primaryColor, // Change to your primaryColor
+                      shape: BoxShape.rectangle,
+                      border: Border.all(
+                          width: 2,
+                          color: lightColor), // Change to your lightColor
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Text(
+                      "Start",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: isPressed
+                            ? primaryColor
+                            : lightColor, // Change to your lightColor
+                      ),
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.topRight,
                   child: GestureDetector(
@@ -99,7 +143,7 @@ class _HomeState extends State<Home> {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 32),
+                    margin: const EdgeInsets.symmetric(vertical: 48),
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
                       color: darkOutineColor,
@@ -121,14 +165,14 @@ class _HomeState extends State<Home> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     CustomPaint(
-                                        painter: TrianglePainter(),
-                                        size: const Size(12, 12)),
-                                    CustomPaint(
                                       painter: MainPainter(
                                           timeElapsed: _timeCounter,
                                           totalTime: totalTime,
                                           aniValue: value,
                                           notifier: _counter),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
                                     ),
                                     Container(
                                         alignment: Alignment.center,
