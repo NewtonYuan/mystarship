@@ -2,19 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mystarship/components/animated_button.dart';
 import 'package:mystarship/components/home_menu.dart';
 import 'package:mystarship/components/timer.dart';
 import 'package:mystarship/constants.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
+// Main Function
 void main() {
   runApp(const MyApp());
 }
 
+// Main App
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // Main App Root
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,11 +26,13 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: primaryColor,
           textTheme:
               Theme.of(context).textTheme.apply(displayColor: lightColor)),
+      // Home Page
       home: const Home(),
     );
   }
 }
 
+// Home Widget
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -36,18 +40,26 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+// Home State
 class _HomeState extends State<Home> {
-  final _counter = ValueNotifier<int>(0);
+  // Time counter for timer/stopwatch
   int _timeCounter = 0;
-  int totalTime = 90;
+  // Initial total time for timer (30min)
+  int totalTime = 1800;
+  // Hour count for UI
   int hours = 0;
-  late Timer _timer = Timer(Duration.zero, () {});
-  bool isPressed = false;
+  // Initialize Timer
+  late Timer _timer;
+  // Timer state for UI
+  String timerState = 'resetted';
 
   @override
   void initState() {
-    hours = ((totalTime - _timeCounter) ~/ 3600);
+    checkHours();
     super.initState();
+    _timer = Timer(Duration.zero, () {});
+    stopTimer();
+    resetTimer();
   }
 
   @override
@@ -57,16 +69,32 @@ class _HomeState extends State<Home> {
   }
 
   void startTimer() {
+    timerState = 'started';
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       setState(() {
-        _timeCounter++;
-        hours = ((totalTime - _timeCounter) ~/ 3600);
+        if (_timeCounter < totalTime) {
+          _timeCounter++;
+        } else {
+          stopTimer();
+        }
       });
     });
   }
 
   void stopTimer() {
     _timer.cancel();
+    timerState = 'stopped';
+  }
+
+  void checkHours() {
+    hours = ((totalTime - _timeCounter) ~/ 3600);
+  }
+
+  void resetTimer() {
+    setState(() {
+      _timeCounter = 0;
+    });
+    timerState = 'resetted';
   }
 
   @override
@@ -80,48 +108,6 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
               children: [
-                GestureDetector(
-                  onTapDown: (_) {
-                    setState(() {
-                      isPressed = true;
-                    });
-                  },
-                  onTapUp: (_) {
-                    setState(() {
-                      isPressed = false;
-                    });
-                  },
-                  onTapCancel: () {
-                    setState(() {
-                      isPressed = false;
-                    });
-                  },
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    alignment: Alignment.center,
-                    height: 50,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      color: isPressed
-                          ? lightColor
-                          : primaryColor, // Change to your primaryColor
-                      shape: BoxShape.rectangle,
-                      border: Border.all(
-                          width: 2,
-                          color: lightColor), // Change to your lightColor
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text(
-                      "Start",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: isPressed
-                            ? primaryColor
-                            : lightColor, // Change to your lightColor
-                      ),
-                    ),
-                  ),
-                ),
                 Align(
                   alignment: Alignment.topRight,
                   child: GestureDetector(
@@ -143,7 +129,7 @@ class _HomeState extends State<Home> {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 48),
+                    margin: const EdgeInsets.symmetric(vertical: 24),
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
                       color: darkOutineColor,
@@ -152,11 +138,35 @@ class _HomeState extends State<Home> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ValueListenableBuilder<int>(
-                          valueListenable: _counter,
-                          builder: (context, value, child) {
-                            return TweenAnimationBuilder(
-                              duration: const Duration(seconds: 0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AnimatedOpacity(
+                              duration: const Duration(milliseconds: 200),
+                              opacity: timerState == 'resetted'
+                                  ? totalTime <= 900
+                                      ? 0.3
+                                      : 1
+                                  : 0,
+                              child: IgnorePointer(
+                                  ignoring: timerState != 'resetted' ||
+                                      totalTime <= 900,
+                                  child: AnimatedButton(
+                                    onTapUp: () {
+                                      if (totalTime > 900) {
+                                        setState(() {
+                                          totalTime -= 900;
+                                          checkHours();
+                                        });
+                                      }
+                                    },
+                                    variant: 'icon',
+                                    assetFile: "assets/icons/minus.svg",
+                                    margin: 200,
+                                  )),
+                            ),
+                            TweenAnimationBuilder(
+                              duration: const Duration(seconds: 5),
                               tween: Tween(begin: 0.0, end: 1.0),
                               curve: Curves.easeOutCubic,
                               builder: (BuildContext context, dynamic value,
@@ -168,10 +178,9 @@ class _HomeState extends State<Home> {
                                       painter: MainPainter(
                                           timeElapsed: _timeCounter,
                                           totalTime: totalTime,
-                                          aniValue: value,
-                                          notifier: _counter),
+                                          aniValue: value),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Container(
@@ -182,7 +191,7 @@ class _HomeState extends State<Home> {
                                             color: primaryColor,
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                                width: 2, color: lightColor)),
+                                                width: 3, color: lightColor)),
                                         child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -203,13 +212,13 @@ class _HomeState extends State<Home> {
                                                       Text(
                                                         '${(totalTime - _timeCounter) ~/ 3600}',
                                                         style: const TextStyle(
-                                                            fontSize: 72,
+                                                            fontSize: 48,
                                                             color: lightColor),
                                                       ),
                                                       const Text(
                                                         'h',
                                                         style: TextStyle(
-                                                            fontSize: 24,
+                                                            fontSize: 16,
                                                             color: lightColor),
                                                       ),
                                                     ],
@@ -222,7 +231,7 @@ class _HomeState extends State<Home> {
                                                     .padLeft(2, '0'),
                                                 style: TextStyle(
                                                     fontSize:
-                                                        (hours <= 0 ? 64 : 56),
+                                                        (hours <= 0 ? 64 : 48),
                                                     color: lightColor),
                                               ),
                                               const Text(
@@ -251,32 +260,52 @@ class _HomeState extends State<Home> {
                                   ],
                                 );
                               },
-                            );
-                          },
+                            ),
+                            AnimatedOpacity(
+                              duration: const Duration(milliseconds: 200),
+                              opacity: timerState == 'resetted'
+                                  ? totalTime >= 7200
+                                      ? 0.3
+                                      : 1
+                                  : 0,
+                              child: IgnorePointer(
+                                  ignoring: timerState != 'resetted' ||
+                                      totalTime >= 7200,
+                                  child: AnimatedButton(
+                                    onTapUp: () {
+                                      if (totalTime < 7200) {
+                                        setState(() {
+                                          totalTime += 900;
+                                          checkHours();
+                                        });
+                                      }
+                                    },
+                                    variant: 'icon',
+                                    assetFile: "assets/icons/plus.svg",
+                                    margin: 200,
+                                  )),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 48),
-                        GestureDetector(
-                          onTapUp: (TapUpDetails details) {
-                            if (_timer.isActive) {
-                              stopTimer();
-                              _timeCounter = 0;
-                            } else {
-                              startTimer();
-                            }
+                        AnimatedButton(
+                          text: timerState == 'started'
+                              ? 'Stop'
+                              : timerState == 'stopped'
+                                  ? 'Reset'
+                                  : 'Start',
+                          onTapUp: () {
+                            setState(() {
+                              if (timerState == 'started') {
+                                stopTimer();
+                              } else if (timerState == 'stopped') {
+                                resetTimer();
+                              } else if (timerState == 'resetted') {
+                                startTimer();
+                              }
+                            });
                           },
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 50,
-                            width: 150,
-                            decoration: BoxDecoration(
-                                color: primaryColor,
-                                shape: BoxShape.rectangle,
-                                border: Border.all(width: 2, color: lightColor),
-                                borderRadius: BorderRadius.circular(16)),
-                            child: const Text("Start",
-                                style:
-                                    TextStyle(fontSize: 24, color: lightColor)),
-                          ),
+                          variant: "text",
                         )
                       ],
                     ),
