@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mystarship/constants.dart';
+import 'package:mystarship/tools/constants.dart';
 
 class AnimatedButton extends StatefulWidget {
   final String? text;

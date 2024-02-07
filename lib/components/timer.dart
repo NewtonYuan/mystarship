@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:mystarship/constants.dart';
+import 'package:mystarship/tools/constants.dart';
 
 class MainPainter extends CustomPainter {
   int timeElapsed;
