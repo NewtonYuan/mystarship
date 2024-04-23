@@ -8,6 +8,7 @@ class AnimatedButton extends StatefulWidget {
   final String variant;
   final String? assetFile;
   final double? margin;
+  final double widthRatio;
 
   const AnimatedButton(
       {Key? key,
@@ -15,7 +16,8 @@ class AnimatedButton extends StatefulWidget {
       required this.onTapUp,
       required this.variant,
       this.assetFile,
-      this.margin})
+      this.margin,
+      required this.widthRatio})
       : super(key: key);
 
   @override
@@ -48,13 +50,14 @@ class AnimatedButtonState extends State<AnimatedButton> {
         duration: const Duration(milliseconds: 100),
         alignment: Alignment.center,
         margin: EdgeInsets.only(top: widget.margin ?? 0),
-        height: widget.variant == 'text' ? 50 : 48,
-        width: widget.variant == 'text' ? 150 : 48,
+        height: (widget.variant == 'text' ? 50 : 48) * widget.widthRatio,
+        width: (widget.variant == 'text' ? 150 : 48) * widget.widthRatio,
         decoration: widget.variant == 'text'
             ? BoxDecoration(
                 color: isPressed ? lightColor : primaryColor,
                 shape: BoxShape.rectangle,
-                border: Border.all(width: 3, color: lightColor),
+                border:
+                    Border.all(width: 3 * widget.widthRatio, color: lightColor),
                 borderRadius: BorderRadius.circular(16),
               )
             : BoxDecoration(
@@ -65,7 +68,7 @@ class AnimatedButtonState extends State<AnimatedButton> {
             ? Text(
                 widget.text ?? '',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 24 * widget.widthRatio,
                   color: isPressed ? primaryColor : lightColor,
                 ),
               )

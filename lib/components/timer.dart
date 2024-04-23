@@ -6,21 +6,24 @@ import 'package:mystarship/tools/constants.dart';
 class MainPainter extends CustomPainter {
   int timeElapsed;
   int totalTime;
+  double widthRatio;
   double aniValue;
   double pi = math.pi;
 
   MainPainter(
       {required this.timeElapsed,
       required this.totalTime,
-      required this.aniValue});
+      required this.aniValue,
+      required this.widthRatio});
 
   @override
   void paint(Canvas canvas, Size size) {
-    Rect rect = const Offset(-125.0, 0) & const Size(250.0, 250.0);
+    Rect rect = Offset(-125.0 * widthRatio, 0) &
+        Size(250.0 * widthRatio, 250.0 * widthRatio);
 
     var paint = Paint()
       ..color = lightColor
-      ..strokeWidth = 12
+      ..strokeWidth = 12 * widthRatio
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 

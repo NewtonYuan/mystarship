@@ -90,6 +90,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    double widthRatio = size.width / 420;
+    double heightRatio = size.height / 933.6;
     return Scaffold(
       body: Stack(
         children: [
@@ -119,8 +121,8 @@ class _HomeState extends State<Home> {
                         },
                         child: Container(
                             alignment: Alignment.center,
-                            height: 48,
-                            width: 48,
+                            height: 48 * widthRatio,
+                            width: 48 * widthRatio,
                             child: SvgPicture.asset("assets/icons/menu.svg")),
                       ),
                     ),
@@ -162,7 +164,8 @@ class _HomeState extends State<Home> {
                                     },
                                     variant: 'icon',
                                     assetFile: "assets/icons/minus.svg",
-                                    margin: 200,
+                                    margin: 200 * widthRatio,
+                                    widthRatio: widthRatio,
                                   )),
                             ),
                             TweenAnimationBuilder(
@@ -184,7 +187,8 @@ class _HomeState extends State<Home> {
                                         painter: MainPainter(
                                             timeElapsed: _timeCounter,
                                             totalTime: totalTime,
-                                            aniValue: value),
+                                            aniValue: value,
+                                            widthRatio: widthRatio),
                                       ),
                                     ),
                                     const SizedBox(
@@ -192,8 +196,8 @@ class _HomeState extends State<Home> {
                                     ),
                                     Container(
                                         alignment: Alignment.center,
-                                        height: 240,
-                                        width: 240,
+                                        height: 240 * widthRatio,
+                                        width: 240 * widthRatio,
                                         decoration: BoxDecoration(
                                             color: primaryColor,
                                             shape: BoxShape.circle,
@@ -230,17 +234,17 @@ class _HomeState extends State<Home> {
                                                             children: [
                                                               Text(
                                                                 '${(totalTime - _timeCounter) ~/ 3600}',
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        48,
+                                                                style: TextStyle(
+                                                                    fontSize: 48 *
+                                                                        widthRatio,
                                                                     color:
                                                                         lightColor),
                                                               ),
-                                                              const Text(
+                                                              Text(
                                                                 'h',
                                                                 style: TextStyle(
-                                                                    fontSize:
-                                                                        16,
+                                                                    fontSize: 16 *
+                                                                        widthRatio,
                                                                     color:
                                                                         lightColor),
                                                               ),
@@ -256,14 +260,16 @@ class _HomeState extends State<Home> {
                                                         style: TextStyle(
                                                             fontSize:
                                                                 (hours <= 0
-                                                                    ? 64
-                                                                    : 48),
+                                                                        ? 64
+                                                                        : 48) *
+                                                                    widthRatio,
                                                             color: lightColor),
                                                       ),
-                                                      const Text(
+                                                      Text(
                                                         'm',
                                                         style: TextStyle(
-                                                            fontSize: 16,
+                                                            fontSize:
+                                                                16 * widthRatio,
                                                             color: lightColor),
                                                       ),
                                                       Text(
@@ -275,14 +281,16 @@ class _HomeState extends State<Home> {
                                                         style: TextStyle(
                                                             fontSize:
                                                                 (hours <= 0
-                                                                    ? 32
-                                                                    : 24),
+                                                                        ? 32
+                                                                        : 24) *
+                                                                    widthRatio,
                                                             color: lightColor),
                                                       ),
-                                                      const Text(
+                                                      Text(
                                                         's',
                                                         style: TextStyle(
-                                                            fontSize: 16,
+                                                            fontSize:
+                                                                16 * widthRatio,
                                                             color: lightColor),
                                                       ),
                                                     ]),
@@ -386,12 +394,13 @@ class _HomeState extends State<Home> {
                                                         const SizedBox(
                                                           height: 56,
                                                         ),
-                                                        const Text(
+                                                        Text(
                                                           'Failure',
                                                           style: TextStyle(
                                                               color:
                                                                   lightFailureColor,
-                                                              fontSize: 32,
+                                                              fontSize: 32 *
+                                                                  widthRatio,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -403,13 +412,13 @@ class _HomeState extends State<Home> {
                                                                   left: 24),
                                                           child: Row(
                                                             children: [
-                                                              const Text(
+                                                              Text(
                                                                 'Failed: ',
                                                                 style: TextStyle(
                                                                     color:
                                                                         lightColor,
-                                                                    fontSize:
-                                                                        20,
+                                                                    fontSize: 20 *
+                                                                        widthRatio,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold),
@@ -417,10 +426,11 @@ class _HomeState extends State<Home> {
                                                               Text(
                                                                 '${_timeCounter ~/ 3600}:${((_timeCounter % 3600) ~/ 60).toString().padLeft(2, '0')}:${(_timeCounter).remainder(60).toString().padLeft(2, '0')}',
                                                                 style:
-                                                                    const TextStyle(
+                                                                    TextStyle(
                                                                   color:
                                                                       lightColor,
-                                                                  fontSize: 20,
+                                                                  fontSize: 20 *
+                                                                      widthRatio,
                                                                 ),
                                                               ),
                                                             ],
@@ -433,13 +443,13 @@ class _HomeState extends State<Home> {
                                                                   left: 24),
                                                           child: Row(
                                                             children: [
-                                                              const Text(
+                                                              Text(
                                                                 'Time left: ',
                                                                 style: TextStyle(
                                                                     color:
                                                                         lightColor,
-                                                                    fontSize:
-                                                                        20,
+                                                                    fontSize: 20 *
+                                                                        widthRatio,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold),
@@ -447,10 +457,11 @@ class _HomeState extends State<Home> {
                                                               Text(
                                                                 '${(totalTime - _timeCounter) ~/ 3600}:${(((totalTime - _timeCounter) % 3600) ~/ 60).toString().padLeft(2, '0')}:${(totalTime - _timeCounter).remainder(60).toString().padLeft(2, '0')}',
                                                                 style:
-                                                                    const TextStyle(
+                                                                    TextStyle(
                                                                   color:
                                                                       lightColor,
-                                                                  fontSize: 20,
+                                                                  fontSize: 20 *
+                                                                      widthRatio,
                                                                 ),
                                                               ),
                                                             ],
@@ -483,7 +494,8 @@ class _HomeState extends State<Home> {
                                     },
                                     variant: 'icon',
                                     assetFile: "assets/icons/plus.svg",
-                                    margin: 200,
+                                    margin: 200 * widthRatio,
+                                    widthRatio: widthRatio,
                                   )),
                             ),
                           ],
@@ -508,6 +520,7 @@ class _HomeState extends State<Home> {
                             });
                           },
                           variant: "text",
+                          widthRatio: widthRatio,
                         )
                       ],
                     ),
