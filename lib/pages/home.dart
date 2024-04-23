@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 24),
+                    margin: EdgeInsets.symmetric(vertical: 24 * heightRatio),
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
                       color: darkOutineColor,
@@ -308,15 +308,17 @@ class _HomeState extends State<Home> {
                                                         milliseconds: 200),
                                                     child: Column(
                                                       children: [
-                                                        const SizedBox(
-                                                          height: 56,
+                                                        SizedBox(
+                                                          height:
+                                                              56 * heightRatio,
                                                         ),
-                                                        const Text(
+                                                        Text(
                                                           'Success!',
                                                           style: TextStyle(
                                                               color:
                                                                   lightSuccessColor,
-                                                              fontSize: 32,
+                                                              fontSize: 32 *
+                                                                  widthRatio,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -328,13 +330,13 @@ class _HomeState extends State<Home> {
                                                                   left: 24),
                                                           child: Row(
                                                             children: [
-                                                              const Text(
+                                                              Text(
                                                                 'Time: ',
                                                                 style: TextStyle(
                                                                     color:
                                                                         lightColor,
-                                                                    fontSize:
-                                                                        20,
+                                                                    fontSize: 20 *
+                                                                        widthRatio,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold),
@@ -342,18 +344,20 @@ class _HomeState extends State<Home> {
                                                               Text(
                                                                 '${totalTime ~/ 3600}:${((totalTime % 3600) ~/ 60).toString().padLeft(2, '0')}:${(totalTime).remainder(60).toString().padLeft(2, '0')}',
                                                                 style:
-                                                                    const TextStyle(
+                                                                    TextStyle(
                                                                   color:
                                                                       lightColor,
-                                                                  fontSize: 20,
+                                                                  fontSize: 20 *
+                                                                      widthRatio,
                                                                 ),
                                                               ),
                                                             ],
                                                           ),
                                                         ),
-                                                        const Padding(
+                                                        Padding(
                                                           padding:
-                                                              EdgeInsets.only(
+                                                              const EdgeInsets
+                                                                  .only(
                                                                   left: 24),
                                                           child: Row(
                                                             children: [
@@ -362,8 +366,8 @@ class _HomeState extends State<Home> {
                                                                 style: TextStyle(
                                                                     color:
                                                                         lightColor,
-                                                                    fontSize:
-                                                                        20,
+                                                                    fontSize: 20 *
+                                                                        widthRatio,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold),
@@ -374,7 +378,8 @@ class _HomeState extends State<Home> {
                                                                     TextStyle(
                                                                   color:
                                                                       lightColor,
-                                                                  fontSize: 20,
+                                                                  fontSize: 20 *
+                                                                      widthRatio,
                                                                 ),
                                                               ),
                                                             ],
@@ -393,8 +398,9 @@ class _HomeState extends State<Home> {
                                                         milliseconds: 200),
                                                     child: Column(
                                                       children: [
-                                                        const SizedBox(
-                                                          height: 56,
+                                                        SizedBox(
+                                                          height:
+                                                              56 * heightRatio,
                                                         ),
                                                         Text(
                                                           'Failure',
@@ -502,7 +508,7 @@ class _HomeState extends State<Home> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 36),
+                        SizedBox(height: 36 * heightRatio),
                         AnimatedButton(
                           text: timerState == 'started'
                               ? 'Stop'

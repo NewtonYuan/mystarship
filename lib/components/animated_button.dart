@@ -57,12 +57,12 @@ class AnimatedButtonState extends State<AnimatedButton> {
                 color: isPressed ? lightColor : primaryColor,
                 shape: BoxShape.rectangle,
                 border:
-                    Border.all(width: 3 * widget.widthRatio, color: lightColor),
+                    Border.all(width: 2 * widget.widthRatio, color: lightColor),
                 borderRadius: BorderRadius.circular(16),
               )
             : BoxDecoration(
                 color: isPressed ? lightColor : primaryColor,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(8),
               ),
         child: widget.variant == 'text'
             ? Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mystarship/pages/login.dart';
 import 'package:mystarship/pages/settings.dart';
 import 'package:mystarship/pages/store.dart';
 import 'package:mystarship/tools/constants.dart';
@@ -81,7 +82,7 @@ class HomeMenu extends StatelessWidget {
               InkWell(
                 onTapUp: (TapUpDetails details) {
                   if (activePage != 'statistics') {
-                    navigateAfterAnimation(context, const Statistics());
+                    navigateAfterAnimation(context, Login());
                   } else {
                     Navigator.pop(modalContext);
                   }
