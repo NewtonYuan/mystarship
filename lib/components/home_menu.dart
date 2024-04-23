@@ -9,12 +9,27 @@ import 'package:mystarship/pages/statistics.dart';
 class HomeMenu extends StatelessWidget {
   final String activePage;
   final BuildContext modalContext;
+  final double widthRatio;
 
   const HomeMenu({
     super.key,
     required this.activePage,
     required this.modalContext,
+    required this.widthRatio,
   });
+
+  void navigateAfterAnimation(BuildContext context, Widget nextPage) {
+    Navigator.pop(context);
+    Future.delayed(const Duration(milliseconds: 180), () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionDuration: Duration.zero,
+          pageBuilder: (context, animation, secondaryAnimation) => nextPage,
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +49,7 @@ class HomeMenu extends StatelessWidget {
               InkWell(
                 onTapUp: (TapUpDetails details) {
                   if (activePage != 'home') {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration.zero,
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const Home(),
-                      ),
-                    );
+                    navigateAfterAnimation(context, const Home());
                   } else {
                     Navigator.pop(modalContext);
                   }
@@ -54,14 +62,14 @@ class HomeMenu extends StatelessWidget {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(right: 24),
-                        height: 48,
-                        width: 48,
+                        height: 48 * widthRatio,
+                        width: 48 * widthRatio,
                         child: SvgPicture.asset("assets/icons/home.svg"),
                       ),
-                      const Text(
+                      Text(
                         "Home",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 24 * widthRatio,
                           color: lightColor,
                           fontWeight: FontWeight.w500,
                         ),
@@ -73,14 +81,7 @@ class HomeMenu extends StatelessWidget {
               InkWell(
                 onTapUp: (TapUpDetails details) {
                   if (activePage != 'statistics') {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration.zero,
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const Statistics(),
-                      ),
-                    );
+                    navigateAfterAnimation(context, const Statistics());
                   } else {
                     Navigator.pop(modalContext);
                   }
@@ -92,13 +93,13 @@ class HomeMenu extends StatelessWidget {
                   child: Row(children: [
                     Container(
                       margin: const EdgeInsets.only(right: 24),
-                      height: 48,
-                      width: 48,
+                      height: 48 * widthRatio,
+                      width: 48 * widthRatio,
                       child: SvgPicture.asset("assets/icons/statistics.svg"),
                     ),
-                    const Text("Statistics",
+                    Text("Statistics",
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 24 * widthRatio,
                             color: lightColor,
                             fontWeight: FontWeight.w500)),
                   ]),
@@ -107,14 +108,7 @@ class HomeMenu extends StatelessWidget {
               InkWell(
                 onTapUp: (TapUpDetails details) {
                   if (activePage != 'store') {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration.zero,
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const Store(),
-                      ),
-                    );
+                    navigateAfterAnimation(context, const Store());
                   } else {
                     Navigator.pop(modalContext);
                   }
@@ -126,13 +120,13 @@ class HomeMenu extends StatelessWidget {
                   child: Row(children: [
                     Container(
                       margin: const EdgeInsets.only(right: 24),
-                      height: 48,
-                      width: 48,
+                      height: 48 * widthRatio,
+                      width: 48 * widthRatio,
                       child: SvgPicture.asset("assets/icons/store.svg"),
                     ),
-                    const Text("Store",
+                    Text("Store",
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 24 * widthRatio,
                             color: lightColor,
                             fontWeight: FontWeight.w500)),
                   ]),
@@ -141,14 +135,7 @@ class HomeMenu extends StatelessWidget {
               InkWell(
                 onTapUp: (TapUpDetails details) {
                   if (activePage != 'settings') {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration.zero,
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const Settings(),
-                      ),
-                    );
+                    navigateAfterAnimation(context, const Settings());
                   } else {
                     Navigator.pop(modalContext);
                   }
@@ -160,13 +147,13 @@ class HomeMenu extends StatelessWidget {
                   child: Row(children: [
                     Container(
                       margin: const EdgeInsets.only(right: 24),
-                      height: 48,
-                      width: 48,
+                      height: 48 * widthRatio,
+                      width: 48 * widthRatio,
                       child: SvgPicture.asset("assets/icons/settings.svg"),
                     ),
-                    const Text("Settings",
+                    Text("Settings",
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 24 * widthRatio,
                             color: lightColor,
                             fontWeight: FontWeight.w500)),
                   ]),

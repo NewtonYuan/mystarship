@@ -15,6 +15,8 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    double widthRatio = size.width / 420;
+    double heightRatio = size.height / 933.6;
     return Scaffold(
       body: Stack(
         children: [
@@ -34,13 +36,15 @@ class _SettingsState extends State<Settings> {
                             return HomeMenu(
                               activePage: "settings",
                               modalContext: context,
+                              widthRatio: widthRatio,
                             );
                           });
                     },
                     child: Container(
+                        margin: EdgeInsets.only(top: 32 * heightRatio),
                         alignment: Alignment.center,
-                        height: 48,
-                        width: 48,
+                        height: 48 * widthRatio,
+                        width: 48 * widthRatio,
                         child: SvgPicture.asset("assets/icons/menu.svg")),
                   ),
                 ),

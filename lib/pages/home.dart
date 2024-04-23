@@ -116,10 +116,12 @@ class _HomeState extends State<Home> {
                                 return HomeMenu(
                                   activePage: "home",
                                   modalContext: context,
+                                  widthRatio: widthRatio,
                                 );
                               });
                         },
                         child: Container(
+                            margin: EdgeInsets.only(top: 32 * heightRatio),
                             alignment: Alignment.center,
                             height: 48 * widthRatio,
                             width: 48 * widthRatio,
