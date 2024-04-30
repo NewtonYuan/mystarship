@@ -19,13 +19,17 @@ class Login extends StatelessWidget {
         body: Center(
           child: Column(
             children: [
-              SizedBox(height: 80 * heightRatio),
-              Icon(
-                Icons.lock,
-                size: 128 * widthRatio,
-                color: lightColor,
+              SizedBox(height: 48 * heightRatio),
+              Container(
+                height: 240,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    alignment: Alignment.bottomCenter,
+                    image: AssetImage("assets/images/logo-filled.png"),
+                  ),
+                ),
               ),
-              SizedBox(height: 64 * heightRatio),
+              SizedBox(height: 24 * heightRatio),
               Text(
                 'Welcome back you\'ve been missed!',
                 style: TextStyle(
@@ -67,7 +71,48 @@ class Login extends StatelessWidget {
                 variant: 'text',
                 widthRatio: widthRatio,
                 text: 'Sign In',
-              )
+              ),
+              SizedBox(height: 48 * heightRatio),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Divider(
+                      thickness: 0.5,
+                      color: secondaryColor,
+                    ),
+                  ),
+                  Text(
+                    'Or continue with',
+                    style:
+                        TextStyle(color: subColor, fontSize: 18 * widthRatio),
+                  ),
+                  const Expanded(
+                    child: Divider(
+                      thickness: 0.5,
+                      color: secondaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 48 * heightRatio),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(20 * widthRatio),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: subLightColor,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Image.asset(
+                      "assets/images/google.png",
+                      height: 64 * widthRatio,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
